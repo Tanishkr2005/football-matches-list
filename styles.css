@@ -1,0 +1,42 @@
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #ffffff 50%, #e0e0e0 50%);
+    }
+
+    h1 {
+      color: #c8102e;
+      text-align: center;
+    }
+
+    .match-list {
+      max-width: 750px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+
+    .match {
+      padding: 15px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .match:last-child {
+      border-bottom: none;
+    }
+
+    .match strong {
+      display: block;
+      font-size: 20px;
+      color: #222;
+      margin-bottom: 6px;
+    }
+
+    .match span {
+      color: #555;
+      font-size: 15px;
+    }

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Arsenal Upcoming Matches</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Upcoming Arsenal Matches</h1>
+  <div class="match-list" id="matches">Loading...</div>
+
+  <script>
+    function convertUTCToIST(date, time) {
+      if (!date || !time) return "N/A";
+
+      const eventUTC = new Date(`${date}T${time}Z`);
+      const eventIST = new Date(eventUTC.getTime() + (5.5 * 60 * 60 * 1000));
+
+      const options = {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+        timeZone: 'Asia/Kolkata'
+      };
+
+      return eventIST.toLocaleString('en-IN', options);
+    }
+
+    async function fetchUpcomingMatches() {
+      try {
+        const response = await fetch("https://www.thesportsdb.com/api/v1/json/123/eventsnext.php?id=133604");
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+        const data = await response.json();
+        const matches = data.events || [];
+
+        // Add 2 custom/dummy matches manually
+        matches.push(
+          {
+            strHomeTeam: "Arsenal",
+            strAwayTeam: "Barcelona",
+            dateEvent: "2025-07-01",
+            strTime: "18:00:00"
+          },
+          {
+            strHomeTeam: "Arsenal",
+            strAwayTeam: "PSG",
+            dateEvent: "2025-07-05",
+            strTime: "16:30:00"
+          }
+        );
+
+        const matchContainer = document.getElementById("matches");
+        matchContainer.innerHTML = "";
+
+        matches.forEach(match => {
+          const matchElement = document.createElement("div");
+          matchElement.className = "match";
+          matchElement.innerHTML = `
+            <strong>${match.strHomeTeam} vs ${match.strAwayTeam}</strong>
+            <span>📅 ${match.dateEvent}</span><br>
+            <span>⏰ ${convertUTCToIST(match.dateEvent, match.strTime)} IST</span>
+          `;
+          matchContainer.appendChild(matchElement);
+        });
+      } catch (error) {
+        document.getElementById("matches").innerHTML = "Error loading match data.";
+        console.error("Unable to fetch data:", error);
+      }
+    }
+
+    fetchUpcomingMatches();
+  </script>
+</body>
+</html>
